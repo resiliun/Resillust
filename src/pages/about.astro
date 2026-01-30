@@ -1,0 +1,78 @@
+---
+import Nav from "../layouts/nav.astro";
+---
+<Nav>
+
+<div class="relative min-h-screen md:h-screen w-full flex flex-col p-6 md:p-16 font-arial overflow-y-auto md:overflow-hidden">
+    
+    <div class="hidden md:flex fixed right-[-5vh] top-1/2 -translate-y-1/2 rotate-90 origin-center pointer-events-none z-0">
+      <h1 class="text-[15vh] leading-none font-italiana opacity-100 tracking-tighter">
+        ABOUT
+      </h1>
+    </div>
+
+    <div class="md:hidden w-full flex justify-center items-center py-10 mb-4">
+        <h1 class="text-7xl font-italiana opacity-100 tracking-tighter text-center">
+          ABOUT
+        </h1>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto w-full flex flex-col justify-center">
+      
+      <section class="mb-10 md:mb-12">
+        <h2 class="text-5xl md:text-7xl text-center md:text-right mb-4 leading-none font-italiana">WHO..</h2>
+        <div class="text-center md:text-right md:ml-auto max-w-2xl mx-auto md:mr-0">
+          <p class="text-lg md:text-xl leading-relaxed font-piazzolla">
+            I am Resillust, a freelance illustrator from Indonesia. My creative journey has led me to specialize in 2D and 3D illustration, a field where I feel most at home and capable of delivering.
+          </p>
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-black/10 my-8"></div>
+
+      <section class="mb-10 md:mb-12">
+        <h2 class="text-5xl md:text-6xl text-center md:text-left mb-6 leading-none font-italiana">BACKGROUND</h2>
+        <div class="space-y-4 text-center md:text-left">
+          <h3 class="text-xl md:text-2xl font-bold italic underline decoration-1 underline-offset-4 font-piazzolla">student | Institut Seni Indonesia</h3>
+          <ul class="space-y-3 text-sm md:text-base italic max-w-2xl mx-auto md:mx-0 list-none px-4 md:px-0 font-piazzolla">
+            <li><span class="font-bold">Printmaking:</span> Focused on manual printing techniques and material-based visual design development.</li>
+            <li><span class="font-bold">Media Technology:</span> Exploration of creative software and the adaptation of artworks into digital platforms.</li>
+            <li><span class="font-bold">Entrepreneurship:</span> Development of creative business models, arts project management, and art marketing strategies.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-black/10 my-8"></div>
+
+      <section class="pb-16 md:pb-0">
+        <h2 class="text-5xl md:text-6xl text-center md:text-right mb-8 leading-none font-italiana">SKILLS</h2>
+        <div class="flex flex-col items-center md:items-end">
+          <p class="text-[10px] tracking-[0.4em] mb-6 opacity-60 uppercase font-piazzolla">Software I use</p>
+          
+          <div class="flex flex-wrap justify-center gap-8 md:gap-14 items-start">
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-14 h-14 bg-gray-100 rounded flex items-center justify-center">
+                 <img src="/icons/cubism.png" alt="" class="w-10 h-10 object-contain grayscale opacity-80" />
+              </div>
+              <span class="text-[9px] tracking-widest font-bold uppercase">Cubism</span>
+            </div>
+
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center">
+                 <img src="/icons/csp.png" alt="" class="w-10 h-10 object-contain grayscale opacity-80" />
+              </div>
+              <span class="text-[9px] tracking-widest font-bold uppercase text-center leading-tight">Clip Studio<br/>Paint</span>
+            </div>
+
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-14 h-14 bg-gray-100 rounded flex items-center justify-center">
+                 <img src="/icons/blender.png" alt="" class="w-10 h-10 object-contain grayscale opacity-80" />
+              </div>
+              <span class="text-[9px] tracking-widest font-bold uppercase">Blender</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</Nav>

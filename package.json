@@ -1,0 +1,27 @@
+{
+  "name": "resilust",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/vercel": "^9.0.4",
+    "@react-email/components": "^1.0.6",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.9",
+    "dotenv": "^17.2.3",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "resend": "^6.8.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@react-email/preview-server": "^5.2.5",
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3"
+  }
+}

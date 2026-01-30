@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@import url(https://fonts.googleapis.com);
+/* src/styles/global.css */
+/* ... kode @tailwind lainnya ... */
+
+.font-linden {
+  font-family: "Linden Hill", serif !important;
+}
+.font-italiana {
+  font-family: "Italiana", serif !important;
+}
+
+.font-mono-plex {
+  font-family: "IBM Plex Mono", monospace !important;
+}
+
+.font-piazzolla {
+  font-family: "Piazzolla", serif !important;
+}
+
+.font-jacquarda-bastarda-9-regular {
+  font-family: "Jacquarda Bastarda 9", serif !important;
+}

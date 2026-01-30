@@ -1,0 +1,409 @@
+---
+import Nav from '../layouts/nav.astro';
+
+// --- DATA KOMISI (TETAP SAMA) ---
+const commissions = [
+  {
+    id: '2d',
+    title: '2D ASSETS',
+    status: 'Open',
+    type: 'active',
+    img: '/path-to-your-2d-image.jpg', 
+    prices: [
+      { item: 'Icon/Prop', price: '80-100 K' },
+      { item: 'Half Body Parts', price: '250-300 K' },
+      { item: 'Full Set', price: '500 K' }
+    ]
+  },
+  {
+    id: 'illus',
+    title: 'ILLUSTRATION',
+    status: 'Open',
+    type: 'active',
+    img: '/path-to-your-illus-image.jpg', 
+    prices: [
+      { item: 'Portrait', price: '300 K' },
+      { item: 'Half Body', price: '600 K' },
+      { item: 'Full Body', price: '1.000 K' },
+      { item: 'Narrative Scene', price: '1.500 K' }
+    ]
+  },
+  {
+    id: '3d',
+    title: '3D ASSETS',
+    status: 'Closed',
+    type: 'disabled', 
+    img: '', 
+    prices: []
+  }
+];
+---
+
+<Nav>
+  <section class="w-full min-h-screen flex flex-col items-center justify-start py-10 md:py-20 relative bg-[#F5F5F0]">
+    
+    <h1 class="font-italian text-4xl md:text-6xl text-[#1A1B19] mb-8 tracking-widest uppercase text-center">
+      COMMISSION
+    </h1>
+
+    <div class="w-[90%] md:w-[85%] h-auto md:h-[70vh] flex flex-col md:flex-row items-stretch border border-[#1A1B19]/20 p-2 md:p-0 bg-[#F5F5F0] overflow-hidden">
+      {commissions.map((item) => (
+        <>
+          <div 
+            id={`card-${item.id}`}
+            class:list={[
+              "hidden md:flex flex-col relative overflow-hidden border-r border-[#1A1B19]/10 last:border-r-0 group card-main",
+              item.type === 'disabled' ? 'bg-black/80 cursor-not-allowed grayscale' : 'bg-[#EBEBE6] cursor-pointer card-interactive',
+            ]}
+            data-id={item.id}
+            data-status={item.type}
+          >
+            <div class="collapsed-view w-full h-full flex flex-col items-center justify-center transition-opacity duration-500 absolute inset-0 z-10 pointer-events-none">
+              <div class="w-16 h-16 border border-[#1A1B19]/40 flex items-center justify-center mb-4 rotate-45 group-hover:rotate-0 transition-transform duration-500">
+                <span class="text-xs font-mono">SVG</span>
+              </div>
+              <h2 class:list={["font-italian text-xl tracking-[0.2em] uppercase text-center", item.type === 'disabled' ? 'text-white/50' : 'text-[#1A1B19]']}>
+                {item.title}
+              </h2>
+              {item.type === 'disabled' && <span class="text-xs font-mono text-red-400 mt-2 uppercase text-[10px] tracking-widest">Off-Service</span>}
+            </div>
+
+            <div class="expanded-view w-full h-full flex flex-row opacity-0 pointer-events-none transition-opacity duration-500 delay-100">
+              <div class="w-[55%] h-full bg-gray-300 relative overflow-hidden">
+                <div class="w-full h-full bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700" style={`background-image: url('${item.img}'); background-color: #999;`}>
+                   <div class="absolute inset-0 flex items-center justify-center text-white font-italian text-2xl mix-blend-difference">Image Explain</div>
+                </div>
+              </div>
+              <div class="w-[45%] h-full p-8 flex flex-col justify-center bg-[#F5F5F0] relative">
+                <button class="btn-close-card absolute top-6 right-6 p-2 hover:rotate-90 transition-transform duration-300 z-50">
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+                <h3 class="font-italian text-3xl mb-2">{item.title}</h3>
+                <div class="font-mono text-sm mb-6 flex items-center gap-2">
+                  <span>Status:</span>
+                  <span class="px-2 py-0.5 border border-green-800 text-green-800 text-xs rounded-full uppercase">{item.status}</span>
+                </div>
+                <ul class="space-y-3 font-linden text-lg">
+                  {item.prices.map((price) => (
+                    <li class="flex justify-between border-b border-black/10 pb-1">
+                      <span>{price.item}</span>
+                      <span class="font-mono text-sm opacity-70">{price.price}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div class="blink-layer absolute inset-0 bg-white opacity-0 pointer-events-none z-50"></div>
+          </div>
+
+          <div 
+            class:list={[
+              "md:hidden w-full h-32 flex flex-col items-center justify-center border border-[#1A1B19]/20 relative overflow-hidden mb-2",
+              item.type === 'disabled' ? 'bg-[#2a2a2a] grayscale' : 'bg-[#EBEBE6] active:bg-[#d4d4d4]'
+            ]}
+            onclick={item.type === 'disabled' ? `triggerBlinkMobile('${item.id}')` : `openModal('${item.id}')`}
+          >
+             <div class="w-10 h-10 border border-[#1A1B19]/40 flex items-center justify-center mb-2 rotate-45">
+                <span class="text-[0.6rem] font-mono">SVG</span>
+             </div>
+             <h2 class:list={["font-italian text-xl tracking-[0.2em] uppercase z-10", item.type === 'disabled' ? 'text-white/50' : 'text-[#1A1B19]']}>{item.title}</h2>
+             <div id={`blink-${item.id}`} class="absolute inset-0 bg-white opacity-0 pointer-events-none"></div>
+          </div>
+        </>
+      ))}
+    </div>
+
+    <div class="mt-16 flex flex-col items-center group cursor-pointer" onclick="openCommissionForm()">
+      <div class="mb-2 animate-bounce">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5">
+          <path d="M7 10l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="font-italian text-2xl tracking-widest border-b border-black pb-1 uppercase">forum commission.!</span>
+    </div>
+
+    <div id="form-modal-overlay" class="fixed inset-0 bg-black/70 z-[200] hidden items-center justify-center p-4 md:p-10 backdrop-blur-md opacity-0 transition-opacity duration-300 touch-none">
+      <div id="form-modal-content" class="bg-white w-full max-w-6xl h-[85vh] md:h-auto md:max-h-[90vh] rounded-[30px] md:rounded-[50px] shadow-2xl flex flex-col md:flex-row overflow-hidden transform scale-95 transition-transform duration-300 border border-black/10 pointer-events-auto">
+        
+        <div class="flex-[1.5] p-6 md:p-12 overflow-y-auto custom-scrollbar-thin">
+          <div class="flex items-center gap-2 mb-6 border-b border-black/40 w-fit">
+            <span class="font-italian text-lg">forum commission.!</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M7 14l5-5 5 5"/></svg>
+          </div>
+
+          <form id="commission-order-form" class="space-y-6 text-[#1A1B19]">
+            <div class="space-y-4">
+              <p class="font-linden italic opacity-70 border-b border-black/10 w-fit">Your contact!..</p>
+              <div class="flex flex-col">
+                <label class="text-[10px] uppercase font-mono mb-1">name:</label>
+                <input type="text" name="name" required class="border-b border-black/20 bg-transparent py-1 focus:outline-none focus:border-black transition-all" />
+              </div>
+              <div class="flex flex-col">
+                <label class="text-[10px] uppercase font-mono mb-1">whatsapp \ username instagram :</label>
+                <input type="text" name="contact" required class="border-b border-black/20 bg-transparent py-1 focus:outline-none focus:border-black transition-all" />
+              </div>
+            </div>
+
+            <div class="space-y-4 pt-4">
+              <p class="font-linden italic opacity-70 border-b border-black/10 w-fit">list Order</p>
+              <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                <label class="text-sm font-italian min-w-[120px]">chose Type :</label>
+                <select id="select-type" name="category" required class="flex-1 bg-[#F0F0EB] p-2 rounded-md border border-black/5 focus:outline-none">
+                  <option value="">-- select --</option>
+                  <option value="2d">2D Asset</option>
+                  <option value="illustration">Illustration</option>
+                  <option value="3d">3D Asset</option>
+                </select>
+              </div>
+              <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                <label class="text-sm font-italian min-w-[120px]">chose coverage :</label>
+                <select id="select-coverage" name="packageName" required disabled class="flex-1 bg-[#F0F0EB] p-2 rounded-md border border-black/5 focus:outline-none disabled:opacity-40">
+                  <option value="">-- select type first --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-y-2 pt-4">
+              <p class="font-linden italic opacity-70 border-b border-black/10 w-fit">your description</p>
+              <textarea name="description" placeholder="Details (Poses, Emotions, References etc)" class="w-full h-32 p-4 bg-[#F5F5F0] border border-black/10 rounded-2xl focus:outline-none focus:border-black transition-all resize-none font-linden"></textarea>
+            </div>
+
+            <button type="submit" id="submit-btn" class="w-full py-4 bg-[#1A1B19] text-white font-mono uppercase tracking-[0.3em] text-xs hover:bg-black transition-all rounded-xl">SUBMIT ORDER</button>
+          </form>
+        </div>
+
+        <div class="hidden md:block w-[1px] bg-black/5 my-12"></div>
+
+        <div class="flex-1 p-6 md:p-12 bg-[#F9F9F7] md:bg-transparent flex flex-col overflow-hidden border-t md:border-t-0 border-black/5 min-h-[300px] md:min-h-0">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold border-b border-black uppercase tracking-widest text-xs">Commission Guidelines</h4>
+            <button onclick="closeCommissionForm()" class="md:hidden text-[10px] font-bold border border-black/40 px-2 py-1 uppercase">Close</button>
+          </div>
+          
+          <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar-thin text-[11px] md:text-[1vw] leading-relaxed space-y-6 pb-6">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="font-linden mb-1 underline text-black-700">I DON'T DRAW</p>
+                <ul class="opacity-70 space-y-0.5 font-linden"><li>• Mecha / Robots</li><li>• Gore / Violence</li></ul>
+              </div>
+              <div>
+                <p class="font-linden mb-1 underline text-black-700">I CAN =</p>
+                <ul class="opacity-70 space-y-0.5 font-linden"><li>• Male / Female</li><li>• OC / Fanart</li></ul>
+              </div>
+            </div>
+
+            <section>
+              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">General Rules:</h5>
+              <div class="space-y-2 opacity-80 font-linden">
+                <p><strong>Copyright:</strong> I retain all rights to the artwork. Portfolio usage unless requested otherwise.</p>
+                <p><strong>Usage:</strong> Personal use only. Commercial use requires prior discussion (extra fee).</p>
+                <p><strong>Background:</strong> Simple/flat is free. Detailed backgrounds incur charges.</p>
+              </div>
+            </section>
+
+            <section>
+              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">Payment & Process:</h5>
+              <div class="space-y-2 opacity-80 font-linden">
+                <p><strong>Payment:</strong> Full payment upfront via PayPal / Local Bank.</p>
+                <p><strong>No Refunds:</strong> No cancellations once work has started.</p>
+                <p><strong>Duration:</strong> Estimated time provided. Please be patient!</p>
+              </div>
+            </section>
+
+            <section>
+              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">Revisions:</h5>
+              <div class="space-y-2 opacity-80 font-linden">
+                <p>• Free revisions at: <strong>Sketch, Base Color, and Final.</strong></p>
+                <p>• No major changes after sketch phase.</p>
+              </div>
+            </section>
+
+            <section>
+              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">Final Files:</h5>
+              <p class="opacity-80 font-linden">High-Res PNG/JPG and PSD via email.</p>
+            </section>
+          </div>
+          
+          <button onclick="closeCommissionForm()" class="hidden md:block mt-8 w-full py-2 border border-black/20 font-mono text-[10px] uppercase hover:bg-black hover:text-white transition-all">Close Forum</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-overlay" class="fixed inset-0 bg-black/50 z-[99] hidden flex-col items-center justify-center p-6 backdrop-blur-md opacity-0 transition-opacity duration-300 touch-none">
+      <div class="bg-[#F5F5F0] w-full max-w-sm h-auto max-h-[85vh] relative shadow-2xl flex flex-col border border-[#1A1B19]/20 transform scale-95 transition-transform duration-300 overflow-hidden pointer-events-auto" id="modal-content">
+        <button onclick="closeModal()" class="absolute top-4 right-4 z-[100] bg-black text-white p-2 rounded-full shadow-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <div class="w-full h-48 bg-gray-800 overflow-hidden">
+          <img id="modal-img" src="" class="w-full h-full object-cover grayscale" />
+        </div>
+        <div class="p-8 flex flex-col items-center">
+           <h3 id="modal-type" class="font-italian text-3xl mb-4 tracking-widest border-b border-black text-center">TYPE</h3>
+           <ul id="modal-list" class="w-full space-y-4 font-linden text-center"></ul>
+           <a href="/contact" class="mt-8 px-8 py-2 bg-[#1A1B19] text-white font-mono text-sm uppercase tracking-tighter">ORDER NOW</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</Nav>
+
+<style>
+  /* MENCEGAH SCROLL BACKGROUND */
+  :global(body.modal-open) {
+    overflow: hidden !important;
+    height: 100vh;
+  }
+
+  .custom-scrollbar-thin::-webkit-scrollbar { width: 3px; }
+  .custom-scrollbar-thin::-webkit-scrollbar-thumb { background: #1A1B19; border-radius: 10px; }
+
+  .card-main { flex: 1; transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+  .expanded-view { display: none; }
+  .card-active { flex: 5 !important; background-color: #F5F5F0 !important; cursor: default !important; }
+  .card-active .collapsed-view { opacity: 0; display: none; }
+  .card-active .expanded-view { display: flex; opacity: 1; pointer-events: auto; }
+  .card-inactive { flex: 0.3 !important; opacity: 0.4; filter: grayscale(1); pointer-events: none; }
+  .card-interactive:not(.card-inactive):hover { flex: 1.2; background-color: #E0E0DB; }
+  @keyframes flash { 0% { opacity: 0; } 50% { opacity: 0.8; } 100% { opacity: 0; } }
+  .animate-blink { animation: flash 0.15s ease-in-out 2; }
+</style>
+
+<script is:inline define:vars={{ commissions }}>
+  // UTILITY UNTUK BODY SCROLL LOCK
+  const lockScroll = () => document.body.classList.add('modal-open');
+  const unlockScroll = () => document.body.classList.remove('modal-open');
+
+  // --- LOGIC KARTU (TETAP SAMA) ---
+  const cards = document.querySelectorAll('.card-interactive');
+  const closeBtns = document.querySelectorAll('.btn-close-card');
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-close-card')) return;
+      cards.forEach(c => c.classList.remove('card-active', 'card-inactive'));
+      card.classList.add('card-active');
+      document.querySelectorAll('.card-main:not(.card-active)').forEach(c => c.classList.add('card-inactive'));
+    });
+  });
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.card-main').forEach(c => c.classList.remove('card-active', 'card-inactive'));
+    });
+  });
+
+  // --- LOGIC FORUM COMMISSION (DIPERBARUI DENGAN LOCK) ---
+  const coverageData = {
+    "2d": ["Icon/Prop", "Half Body Parts", "Full Set"],
+    "illustration": ["Portrait", "Half Body", "Full Body", "Narrative Scene"],
+    "3d": ["Modeling Object", "Modeling Char"]
+  };
+  const selectType = document.getElementById('select-type');
+  const selectCoverage = document.getElementById('select-coverage');
+  selectType?.addEventListener('change', (e) => {
+    const val = e.target.value;
+    if (val && coverageData[val]) {
+      selectCoverage.disabled = false;
+      selectCoverage.innerHTML = '<option value="">-- select coverage --</option>' + 
+        coverageData[val].map(item => `<option value="${item}">${item}</option>`).join('');
+    } else {
+      selectCoverage.disabled = true;
+      selectCoverage.innerHTML = '<option value="">-- select type first --</option>';
+    }
+  });
+
+  window.openCommissionForm = () => {
+    lockScroll();
+    const overlay = document.getElementById('form-modal-overlay');
+    const content = document.getElementById('form-modal-content');
+    overlay.classList.remove('hidden'); overlay.classList.add('flex');
+    setTimeout(() => { overlay.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+  };
+  window.closeCommissionForm = () => {
+    unlockScroll();
+    const overlay = document.getElementById('form-modal-overlay');
+    const content = document.getElementById('form-modal-content');
+    overlay.classList.add('opacity-0'); content.classList.add('scale-95');
+    setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }, 300);
+  };
+
+  // --- LOGIC MODAL LAMA ---
+  window.openModal = function(id) {
+    lockScroll();
+    const data = commissions.find(c => c.id === id);
+    if (!data) return;
+    document.getElementById('modal-type').innerText = data.title;
+    document.getElementById('modal-img').src = data.img || '';
+    const listParent = document.getElementById('modal-list');
+    listParent.innerHTML = data.prices.map(p => `<li class="flex flex-col border-b border-black/5 pb-2"><span class="text-xs opacity-60 uppercase font-mono">${p.item}</span><span class="font-bold text-lg">${p.price}</span></li>`).join('');
+    const overlay = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    overlay.classList.remove('hidden'); overlay.classList.add('flex');
+    setTimeout(() => { overlay.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+  }
+  window.closeModal = function() {
+    unlockScroll();
+    const overlay = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    overlay.classList.add('opacity-0'); content.classList.add('scale-95');
+    setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }, 300);
+  }
+
+  // Blink logic
+  window.triggerBlinkMobile = (id) => {
+    const layer = document.getElementById(`blink-${id}`);
+    if(layer) { layer.classList.add('animate-blink'); setTimeout(() => layer.classList.remove('animate-blink'), 400); }
+  }
+
+  // --- LOGIC PENGIRIMAN FORM (INI YANG SAYA TAMBAHKAN) ---
+  const commissionForm = document.getElementById('commission-order-form');
+  if (commissionForm) {
+    commissionForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Mencegah refresh
+
+      const submitBtn = document.getElementById('submit-btn');
+      const originalText = submitBtn.innerText;
+      
+      // Ubah UI jadi Loading
+      submitBtn.innerText = "SENDING...";
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      const formData = new FormData(commissionForm);
+      const data = {
+        name: formData.get('name'),
+        contact: formData.get('contact'),
+        category: formData.get('category'),
+        packageName: formData.get('packageName'),
+        description: formData.get('description'),
+      };
+
+      try {
+        // Kirim ke API (src/pages/api/commission.ts)
+        const response = await fetch('/api/commission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('Commission request sent successfully! Check your email soon.');
+          commissionForm.reset();
+          window.closeCommissionForm();
+        } else {
+          alert('Failed to send: ' + (result.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+      } finally {
+        // Kembalikan tombol seperti semula
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    });
+  }
+</script>

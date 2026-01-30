@@ -1,0 +1,47 @@
+---
+import Nav from "../layouts/nav.astro";
+import { Picture } from 'astro:assets';
+import myheroimage from '../assets/image.webp'
+---
+
+<Nav>
+<div class="relative w-full h-screen overflow-hidden animate-[animage_1s_ease-in-out]">
+  
+  <div class="fixed inset-0 top-[25vh] md:top-0 md:left-[20vw] z-0">
+    <Picture 
+      src={myheroimage} 
+      id="slideshow-image"
+      formats={['avif', 'webp']}
+      alt="Gambar Utama" 
+      class="w-full h-full object-cover object-center" 
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <p class="z-20 font-jacquarda-bastarda-9-regular text-white tracking-[0.5rem] md:tracking-[1rem] pointer-events-none whitespace-nowrap fixed
+      bottom-10 left-1/2 -translate-x-1/2 text-3xl
+      md:bottom-auto md:left-auto md:right-[-3.1em] md:top-1/2 md:-translate-y-1/2 md:translate-x-0 md:-rotate-90 md:text-[5rem]">
+    PORTOFOLIO
+  </p>
+</div>
+</Nav>
+
+<style is:global>
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #1A1B19;
+  }
+
+  /* Jika layout Nav kamu punya tag main, kita paksa jadi nol */
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+</style>
