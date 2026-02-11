@@ -1,47 +1,63 @@
 ---
 import Nav from "../layouts/nav.astro";
 import { Picture } from 'astro:assets';
-import myheroimage from '../assets/image.webp'
+import myheroimage from '../assets/image.webp';
 ---
 
 <Nav>
-<div class="relative w-full h-screen overflow-hidden animate-[animage_1s_ease-in-out]">
-  
-  <div class="fixed inset-0 top-[25vh] md:top-0 md:left-[20vw] z-0">
-    <Picture 
-      src={myheroimage} 
-      id="slideshow-image"
-      formats={['avif', 'webp']}
-      alt="Gambar Utama" 
-      class="w-full h-full object-cover object-center" 
-      loading="eager"
-      fetchpriority="high"
-    />
-  </div>
+  <div class="relative w-full h-full overflow-hidden bg-black">
+    
+    <div class="absolute inset-0 z-20 bg-white animate-reveal-white pointer-events-none"></div>
 
-  <p class="z-20 font-jacquarda-bastarda-9-regular text-white tracking-[0.5rem] md:tracking-[1rem] pointer-events-none whitespace-nowrap fixed
-      bottom-10 left-1/2 -translate-x-1/2 text-3xl
-      md:bottom-auto md:left-auto md:right-[-3.1em] md:top-1/2 md:-translate-y-1/2 md:translate-x-0 md:-rotate-90 md:text-[5rem]">
-    PORTOFOLIO
-  </p>
-</div>
+    <div class="absolute inset-0 z-0">
+      <Picture 
+        src={myheroimage} 
+        formats={['avif', 'webp']}
+        alt="Hero Artwork" 
+        class="w-full h-full object-cover object-center scale-[1.02] animate-image-entry" 
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+  </div>
 </Nav>
 
 <style is:global>
-  html, body {
+  /* Menghilangkan semua kemungkinan padding/margin yang tersisa */
+  html, body, main {
     margin: 0 !important;
     padding: 0 !important;
-    overflow: hidden !important;
     width: 100% !important;
     height: 100% !important;
-    background-color: #1A1B19;
+    overflow: hidden !important;
   }
 
-  /* Jika layout Nav kamu punya tag main, kita paksa jadi nol */
-  main {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: none !important;
-    width: 100% !important;
+  /* Animasi Transisi White to Image */
+  @keyframes reveal-white {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
+  }
+
+  @keyframes image-entry {
+    0% { opacity: 0; transform: scale(1.1); filter: brightness(1.5); }
+    100% { opacity: 1; transform: scale(1.02); filter: brightness(1); }
+  }
+
+  @keyframes text-fade {
+    0% { opacity: 0; filter: blur(10px); }
+    100% { opacity: 0.9; filter: blur(0); }
+  }
+
+  .animate-reveal-white {
+    animation: reveal-white 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  }
+
+  .animate-image-entry {
+    animation: image-entry 1.8s ease-out forwards;
+  }
+
+  .animate-text-fade {
+    animation: text-fade 1.5s ease-out 0.8s forwards;
   }
 </style>

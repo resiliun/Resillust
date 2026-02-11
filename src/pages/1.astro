@@ -2,52 +2,51 @@
 import "../styles/global.css";
 import Inter from "../layouts/inter.astro";
 import { Image as AstroImage } from "astro:assets";
+// Import data json pusat
+import artworksData from "../assets/artwork/artworks.json";
 
-const allAssets = import.meta.glob<{ default: ImageMetadata | string }>('/src/assets/artwork/illustration/*.{jpeg,jpg,png,gif,webp,avif,mp4,webm,mov}');
+// Ambil semua referensi file dari folder artwork
+const allImages = import.meta.glob<{ default: ImageMetadata }>('/src/assets/artwork/**/*.{jpeg,jpg,png,gif,webp,avif}');
+const allVideos = import.meta.glob<string>('/src/assets/artwork/**/*.{mp4,webm,mov}', { query: 'url' });
 
 const isVideo = (path: string) => /\.(mp4|webm|mov)$/i.test(path);
 
-const groupedFiles: Record<string, any> = {};
-
-await Promise.all(
-  Object.keys(allAssets).map(async (path) => {
-    const assetModule = await allAssets[path]();
-    const src = (assetModule as any).default.src || (assetModule as any).default;
+// Map data JSON ke format yang siap dipakai UI
+const artworks = await Promise.all(artworksData.map(async (item) => {
+  const slides = await Promise.all(item.slides.map(async (fileName) => {
+    // Cari path lengkap file berdasarkan nama di JSON
+    // Kita cari di subfolder apapun (2d/3d/illustration/WIP)
+    const fullPath = Object.keys({ ...allImages, ...allVideos }).find(path => path.endsWith(fileName));
     
-    const fileName = path.split('/').pop()?.split('.')[0] || '';
-    const parts = fileName.split('_');
-    const rawTitle = parts[0]; 
-    const rawDesc = parts[1] || "No description";
-    const rawYear = parts[2] || "2024";
+    if (!fullPath) return null;
 
-    const titleClean = rawTitle ? rawTitle.split('-').join(' ') : "Untitled";
+    const isVid = isVideo(fullPath);
+    let asset: any;
 
-    if (!groupedFiles[titleClean]) {
-      groupedFiles[titleClean] = {
-        title: titleClean,
-        desc: rawDesc ? rawDesc.split('-').join(' ') : "No description provided.",
-        year: rawYear,
-        thumbnail: null, 
-        slides: [] 
-      };
+    if (isVid) {
+      asset = await allVideos[fullPath]();
+    } else {
+      asset = await allImages[fullPath]();
     }
 
-    groupedFiles[titleClean].slides.push({
-      src: src, 
-      type: isVideo(path) ? 'video' : 'image',
-      originalObj: !isVideo(path) ? (assetModule as any).default : null 
-    });
-  })
-);
+    return {
+      src: isVid ? asset.default : asset.default.src,
+      type: isVid ? 'video' : 'image',
+      // Simpan objek original buat AstroImage (Thumbnail)
+      original: !isVid ? asset.default : null
+    };
+  }));
 
-const artworks = Object.values(groupedFiles).map((item: any) => {
-  const thumbSlide = item.slides.find((s: any) => s.type === 'image');
+  // Filter slide yang gak ketemu filenya
+  const validSlides = slides.filter(s => s !== null);
+  
   return {
     ...item,
-    thumbnail: thumbSlide ? thumbSlide.originalObj : null, 
-    fullSrc: thumbSlide ? thumbSlide.src : '', 
+    slides: validSlides,
+    // Thumbnail diambil dari slide pertama
+    thumbnail: validSlides.find(s => s.type === 'image')?.original || null
   };
-}).sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year));
+})).then(res => res.sort((a, b) => parseInt(b.year) - parseInt(a.year)));
 ---
 
 <Inter>
@@ -76,7 +75,7 @@ const artworks = Object.values(groupedFiles).map((item: any) => {
             @click={`
               open = true; 
               currTitle = '${item.title.replace(/'/g, "\\'")}'; 
-              currDesc = '${item.desc.replace(/'/g, "\\'")}'; 
+              currDesc = \`${item.description}\`;
               currYear = '${item.year}';
               // Kita clone array supaya Alpine mendeteksi perubahan total
               slides = JSON.parse(JSON.stringify(${JSON.stringify(item.slides)}));

@@ -1,98 +1,110 @@
 ---
 import MainLayout from '../layouts/nav.astro';
+import { Image as AstroImage } from "astro:assets";
+
+// 1. Ambil semua asset dari tiap folder (eager: true agar metadata langsung siap)
+const illustrations = import.meta.glob('/src/assets/artwork/illustration/*.{jpeg,jpg,png,gif,webp,avif,mp4,webm,mov}', { eager: true });
+const assets2D = import.meta.glob('/src/assets/artwork/2d/*.{jpeg,jpg,png,gif,webp,avif,mp4,webm,mov}', { eager: true });
+const assets3D = import.meta.glob('/src/assets/artwork/3d/*.{jpeg,jpg,png,gif,webp,avif,mp4,webm,mov}', { eager: true });
+const wip = import.meta.glob('/src/assets/artwork/wip/*.{jpeg,jpg,png,gif,webp,avif,mp4,webm,mov}', { eager: true });
+
+// 2. Fungsi Pintar untuk ambil Cover & Hitung Koleksi (Sinkron dengan logika 1.astro)
+const getFolderData = (globGroup: any) => {
+  const entries = Object.entries(globGroup);
+  if (entries.length === 0) return { cover: null, count: 0 };
+
+  // Cari file yang namanya diawali 'COVER_' (Case Insensitive)
+  const coverEntry = entries.find(([path]) => {
+    const fileName = path.split('/').pop()?.toUpperCase() || '';
+    return fileName.startsWith('COVER_');
+  }) || entries[0]; // Fallback ke file pertama kalau gak ada penanda COVER_
+
+  return {
+    cover: (coverEntry[1] as any).default,
+    count: entries.length
+  };
+};
+
+const categories = [
+  { name: 'Illustration', link: '/1', data: getFolderData(illustrations) },
+  { name: '2D Assets', link: '/2', data: getFolderData(assets2D) },
+  { name: '3D Assets', link: '/3', data: getFolderData(assets3D) },
+  { name: 'Work in Progress', link: '/4', data: getFolderData(wip) },
+];
 ---
 
 <MainLayout>
-  <div class="relative h-screen w-full flex flex-col md:flex-row overflow-hidden font-arial bg-white">
+  <main class="min-h-screen w-full bg-white flex flex-col px-8 md:px-20 py-12 overflow-y-auto selection:bg-red-50">
     
-    <section class="
-        order-1 w-full md:w-[20vw] 
-        h-[50vh] md:h-full 
-        flex items-center md:items-start
-        z-20 overflow-hidden
-    ">
-      <div class="
-          w-full h-full flex flex-row md:flex-col 
-          overflow-x-auto md:overflow-y-auto 
-          no-scrollbar gap-6 md:gap-8 
-          px-6 py-10 md:px-8 md:py-24
-          snap-x snap-mandatory md:snap-none
-      ">
-        
-        <div class="min-w-[70vw] md:min-w-0 md:w-full aspect-[3/4] snap-center shrink-0">
-          <div class="relative w-full h-full bg-zinc-800 rounded-sm overflow-hidden group shadow-[0_10px_20px_rgba(0,0,0,0.3)] animate-[animage_1s_ease-in-out]">
-             <div class="w-full h-full flex items-center justify-center text-zinc-600 text-xs italic">
-              <span>2D Assets</span>
-            </div>
-            <a href="/2" class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end items-center pb-6">
-              <span class="text-white text-[10px] mb-1 opacity-60">▼</span>
-              <h2 class="text-white tracking-[0.2em] text-base font-light uppercase italic font-italiana">2D Assets</h2>
-            </a>
-          </div>
-        </div>
-
-        <div class="min-w-[70vw] md:min-w-0 md:w-full aspect-[3/4] snap-center shrink-0">
-          <div class="relative w-full h-full bg-zinc-800 rounded-sm overflow-hidden group shadow-[0_10px_20px_rgba(0,0,0,0.3)] animate-[animage_1.2s_ease-in-out]">
-             <div class="w-full h-full flex items-center justify-center text-zinc-600 text-xs italic">
-              <span>Illustration</span>
-            </div>
-            <a href="/1" class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end items-center pb-6">
-              <span class="text-white text-[10px] mb-1 opacity-60">▼</span>
-              <h2 class="text-white tracking-[0.2em] text-base font-light uppercase italic font-italiana">Illustration</h2>
-            </a>
-          </div>
-        </div>
-
-        <div class="min-w-[70vw] md:min-w-0 md:w-full aspect-[3/4] snap-center shrink-0">
-          <div class="relative w-full h-full bg-zinc-800 rounded-sm overflow-hidden group shadow-[0_10px_20px_rgba(0,0,0,0.3)] animate-[animage_1.4s_ease-in-out]">
-             <div class="w-full h-full flex items-center justify-center text-zinc-600 text-xs italic">
-              <span>3D Assets</span>
-            </div>
-            <a href="3" class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end items-center pb-6">
-              <span class="text-white text-[10px] mb-1 opacity-60">▼</span>
-              <h2 class="text-white tracking-[0.2em] text-base font-light uppercase italic font-italiana">3D Assets</h2>
-            </a>
-          </div>
-        </div>
-
-                <div class="min-w-[70vw] md:min-w-0 md:w-full aspect-[3/4] snap-center shrink-0">
-          <div class="relative w-full h-full bg-zinc-800 rounded-sm overflow-hidden group shadow-[0_10px_20px_rgba(0,0,0,0.3)] animate-[animage_1.4s_ease-in-out]">
-             <div class="w-full h-full flex items-center justify-center text-zinc-600 text-xs italic">
-              <span>Work in Progres</span>
-            </div>
-            <a href="4" class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end items-center pb-6">
-              <span class="text-white text-[10px] mb-1 opacity-60">▼</span>
-              <h2 class="text-white tracking-[0.2em] text-base font-light uppercase italic font-italiana">Work in Progres</h2>
-            </a>
-          </div>
-        </div>
-
-        <div class="hidden md:block h-32 shrink-0"></div>
+    <header class="mb-16 md:mb-20 animate-[anitext_1s_ease-in-out]">
+      <div class="flex items-baseline gap-4">
+        <h1 class="text-4xl md:text-5xl font-light tracking-[0.2em] font-italiana text-gray-900">ARTWORK</h1>
+        <div class="h-[1px] flex-1 bg-gray-200"></div>
+        <span class="text-[10px] tracking-[0.5em] text-gray-400 uppercase hidden sm:block">Archive 01</span>
       </div>
+    </header>
+
+    <section class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 items-start pb-24">
+      {categories.map((cat, index) => (
+        <a href={cat.link} class="group relative flex flex-col gap-6 animate-[anitext_1s_ease-in-out]" style={`animation-delay: ${index * 0.1}s`}>
+          
+          <div class="aspect-[3/4] bg-zinc-50 border border-zinc-100 rounded-sm overflow-hidden relative transition-all duration-700 group-hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] group-hover:-translate-y-2">
+            {cat.data.cover ? (
+              <AstroImage 
+                src={cat.data.cover} 
+                alt={cat.name}
+                width={600}
+                height={800}
+                class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+            ) : (
+              <div class="absolute inset-0 flex items-center justify-center text-zinc-300 text-[10px] tracking-[0.3em] uppercase italic">
+                Empty Folder
+              </div>
+            )}
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+              <span class="text-[10px] text-gray-400 font-serif italic">0{index + 1}</span>
+              <span class="text-[9px] text-gray-400 tracking-[0.2em] uppercase font-bold">{cat.data.count} Items</span>
+            </div>
+            <h2 class="text-xl md:text-2xl font-light tracking-widest font-italiana text-gray-800 group-hover:translate-x-2 transition-transform duration-500">
+              {cat.name}
+            </h2>
+          </div>
+        </a>
+      ))}
     </section>
 
-    <section class="order-2 flex-1 relative flex flex-col items-center justify-center md:justify-center h-[50vh] md:h-full pointer-events-none overflow-hidden">
+    <footer class="mt-auto pt-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-8 border-t border-gray-100">
+      <p class="text-[10px] text-gray-400 max-w-[250px] leading-relaxed tracking-wide text-center md:text-left italic">
+        A curated selection of digital assets and illustrations developed by Resillust.
+      </p>
       
-      <div class="absolute bottom-[10%] md:bottom-[-15%] left-1/2 -translate-x-1/2 w-[280px] h-[280px] md:w-[550px] md:h-[550px] bg-red-600 rounded-full z-0"></div>
-
-      <div class="relative z-10 flex flex-col items-center w-full px-4 animate-[anitext_1s_ease-in-out] -translate-y-12 md:translate-y-0">
-        <h1 class="text-6xl md:text-[9rem] font-light tracking-tighter leading-none text-gray-900 font-italiana text-center">
-          ARTWORK
-        </h1>
-        <div class="w-48 md:w-72 relative mt-2 flex items-center justify-center">
-          <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] bg-gray-300 w-full"></div>
-          <span class="relative z-10 bg-white px-4 text-[8px] md:text-[10px] tracking-[0.5em] text-gray-500 uppercase">
-            s y s t e m
-          </span>
+      <a href="/all" class="group flex flex-col items-center md:items-end gap-2 mb-4 md:mb-0">
+        <span class="text-[11px] tracking-[0.5em] text-gray-900 font-bold group-hover:pr-4 transition-all uppercase">Show all works</span>
+        <div class="flex flex-col gap-1 w-full items-center md:items-end">
+          <span class="w-20 h-[1px] bg-gray-900 transition-all group-hover:w-24"></span>
+          <span class="w-12 h-[1px] bg-gray-900 transition-all group-hover:w-24"></span>
         </div>
-      </div>
-    </section>
+      </a>
+    </footer>
 
-    <button class="hidden md:flex fixed right-10 top-1/2 -translate-y-1/2 flex-col gap-1.5 group z-30">
-        <span class="w-8 h-[2px] bg-black transition-all group-hover:w-10"></span>
-        <span class="w-8 h-[2px] bg-black transition-all group-hover:w-10"></span>
-        <span class="w-8 h-[2px] bg-black transition-all group-hover:w-10"></span>
-    </button>
-
-  </div>
+  </main>
 </MainLayout>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
+  
+  .font-italiana { font-family: 'Italiana', serif; }
+
+  @keyframes anitext {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  main::-webkit-scrollbar { display: none; }
+  main { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

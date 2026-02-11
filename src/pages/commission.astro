@@ -1,14 +1,16 @@
 ---
 import Nav from '../layouts/nav.astro';
+import { Image as AstroImage } from "astro:assets";
 
-// --- DATA KOMISI (TETAP SAMA) ---
 const commissions = [
   {
     id: '2d',
     title: '2D ASSETS',
+    subtitle: 'Vtuber & Game Assets',
     status: 'Open',
     type: 'active',
-    img: '/path-to-your-2d-image.jpg', 
+    img: '/img/2d-sample.jpg', 
+    iconPath: '/icons/a.svg', 
     prices: [
       { item: 'Icon/Prop', price: '80-100 K' },
       { item: 'Half Body Parts', price: '250-300 K' },
@@ -18,9 +20,11 @@ const commissions = [
   {
     id: 'illus',
     title: 'ILLUSTRATION',
+    subtitle: 'Narrative & Character',
     status: 'Open',
     type: 'active',
-    img: '/path-to-your-illus-image.jpg', 
+    img: '/img/illus-sample.jpg', 
+    iconPath: '/icons/b.svg', 
     prices: [
       { item: 'Portrait', price: '300 K' },
       { item: 'Half Body', price: '600 K' },
@@ -31,343 +35,321 @@ const commissions = [
   {
     id: '3d',
     title: '3D ASSETS',
+    subtitle: 'Modeling & Texture',
     status: 'Closed',
     type: 'disabled', 
     img: '', 
+    iconPath: '/icons/c.svg', 
     prices: []
   }
 ];
 ---
 
 <Nav>
-  <section class="w-full min-h-screen flex flex-col items-center justify-start py-10 md:py-20 relative bg-[#F5F5F0]">
+  <main class="w-full h-screen bg-[#F5F5F0] overflow-hidden flex flex-col font-piazzolla selection:bg-black selection:text-white">
     
-    <h1 class="font-italian text-4xl md:text-6xl text-[#1A1B19] mb-8 tracking-widest uppercase text-center">
-      COMMISSION
-    </h1>
+    <header class="h-[12vh] flex items-center justify-between px-6 md:px-12 border-b border-black/5 animate-fade-down">
+      <h1 class="font-italiana text-2xl md:text-3xl tracking-tighter uppercase overflow-hidden whitespace-nowrap border-r-2 border-black/50 animate-typewriter-title">
+        Commission <span class="italic font-light opacity-30">Manifesto</span>
+      </h1>
+      <div class="flex items-center gap-4 md:gap-6 opacity-0 animate-fade-in [animation-delay:1s] [animation-fill-mode:forwards]">
+        <span class="text-[9px] tracking-[0.4em] uppercase opacity-40 hidden md:block">Resillust Studio / 2026</span>
+        <div class="w-8 md:w-12 h-[1px] bg-black/20"></div>
+        <button onclick="openCommissionForm()" class="text-[10px] font-bold tracking-[0.3em] uppercase hover:line-through transition-all">Open Forum</button>
+      </div>
+    </header>
 
-    <div class="w-[90%] md:w-[85%] h-auto md:h-[70vh] flex flex-col md:flex-row items-stretch border border-[#1A1B19]/20 p-2 md:p-0 bg-[#F5F5F0] overflow-hidden">
-      {commissions.map((item) => (
-        <>
-          <div 
-            id={`card-${item.id}`}
-            class:list={[
-              "hidden md:flex flex-col relative overflow-hidden border-r border-[#1A1B19]/10 last:border-r-0 group card-main",
-              item.type === 'disabled' ? 'bg-black/80 cursor-not-allowed grayscale' : 'bg-[#EBEBE6] cursor-pointer card-interactive',
-            ]}
-            data-id={item.id}
-            data-status={item.type}
-          >
-            <div class="collapsed-view w-full h-full flex flex-col items-center justify-center transition-opacity duration-500 absolute inset-0 z-10 pointer-events-none">
-              <div class="w-16 h-16 border border-[#1A1B19]/40 flex items-center justify-center mb-4 rotate-45 group-hover:rotate-0 transition-transform duration-500">
-                <span class="text-xs font-mono">SVG</span>
-              </div>
-              <h2 class:list={["font-italian text-xl tracking-[0.2em] uppercase text-center", item.type === 'disabled' ? 'text-white/50' : 'text-[#1A1B19]']}>
-                {item.title}
-              </h2>
-              {item.type === 'disabled' && <span class="text-xs font-mono text-red-400 mt-2 uppercase text-[10px] tracking-widest">Off-Service</span>}
-            </div>
-
-            <div class="expanded-view w-full h-full flex flex-row opacity-0 pointer-events-none transition-opacity duration-500 delay-100">
-              <div class="w-[55%] h-full bg-gray-300 relative overflow-hidden">
-                <div class="w-full h-full bg-cover bg-center grayscale hover:grayscale-0 transition-all duration-700" style={`background-image: url('${item.img}'); background-color: #999;`}>
-                   <div class="absolute inset-0 flex items-center justify-center text-white font-italian text-2xl mix-blend-difference">Image Explain</div>
-                </div>
-              </div>
-              <div class="w-[45%] h-full p-8 flex flex-col justify-center bg-[#F5F5F0] relative">
-                <button class="btn-close-card absolute top-6 right-6 p-2 hover:rotate-90 transition-transform duration-300 z-50">
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                </button>
-                <h3 class="font-italian text-3xl mb-2">{item.title}</h3>
-                <div class="font-mono text-sm mb-6 flex items-center gap-2">
-                  <span>Status:</span>
-                  <span class="px-2 py-0.5 border border-green-800 text-green-800 text-xs rounded-full uppercase">{item.status}</span>
-                </div>
-                <ul class="space-y-3 font-linden text-lg">
-                  {item.prices.map((price) => (
-                    <li class="flex justify-between border-b border-black/10 pb-1">
-                      <span>{price.item}</span>
-                      <span class="font-mono text-sm opacity-70">{price.price}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div class="blink-layer absolute inset-0 bg-white opacity-0 pointer-events-none z-50"></div>
-          </div>
-
-          <div 
-            class:list={[
-              "md:hidden w-full h-32 flex flex-col items-center justify-center border border-[#1A1B19]/20 relative overflow-hidden mb-2",
-              item.type === 'disabled' ? 'bg-[#2a2a2a] grayscale' : 'bg-[#EBEBE6] active:bg-[#d4d4d4]'
-            ]}
-            onclick={item.type === 'disabled' ? `triggerBlinkMobile('${item.id}')` : `openModal('${item.id}')`}
-          >
-             <div class="w-10 h-10 border border-[#1A1B19]/40 flex items-center justify-center mb-2 rotate-45">
-                <span class="text-[0.6rem] font-mono">SVG</span>
+    <section class="flex-1 flex flex-col md:flex-row items-stretch overflow-hidden relative">
+      {commissions.map((item, index) => (
+        <div 
+          id={`card-${item.id}`}
+          class:list={[
+            "relative flex-1 transition-all duration-[800ms] cubic-bezier(0.23, 1, 0.32, 1) overflow-hidden border-b md:border-b-0 md:border-r border-black/5 last:border-0 group/card card-main opacity-0 animate-fade-up",
+            item.type === 'disabled' ? 'grayscale cursor-not-allowed opacity-60 bg-zinc-200' : 'cursor-pointer card-interactive'
+          ]}
+          style={`animation-delay: ${0.2 * (index + 1)}s; animation-fill-mode: forwards;`}
+          data-id={item.id}
+        >
+          <div class="collapsed-view absolute inset-0 flex flex-col items-center justify-center p-8 transition-all duration-700 group-hover/card:bg-white/40">
+             <span class="text-[15vw] md:text-[10vw] font-italiana opacity-[0.03] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none group-hover/card:opacity-[0.07] transition-opacity uppercase">{item.id}</span>
+             <div class="w-12 h-12 md:w-16 md:h-16 border border-black/10 flex items-center justify-center rotate-45 group-hover/card:rotate-0 transition-all duration-700 mb-6 p-3 md:p-4">
+                <img src={item.iconPath} class="w-full h-full object-contain pointer-events-none" alt="icon" />
              </div>
-             <h2 class:list={["font-italian text-xl tracking-[0.2em] uppercase z-10", item.type === 'disabled' ? 'text-white/50' : 'text-[#1A1B19]']}>{item.title}</h2>
-             <div id={`blink-${item.id}`} class="absolute inset-0 bg-white opacity-0 pointer-events-none"></div>
+             <h2 class="font-italiana text-xl md:text-2xl tracking-[0.3em] uppercase text-center group-hover/card:tracking-[0.5em] transition-all duration-700">{item.title}</h2>
           </div>
-        </>
+
+          <div class="expanded-view opacity-0 pointer-events-none absolute inset-0 flex flex-col md:flex-row h-full w-full bg-[#F5F5F0] z-50">
+            <div class="w-full md:w-[55%] h-[40%] md:h-full relative overflow-hidden bg-zinc-300">
+                <img src={item.img} alt={item.title} class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-[1.5s]" />
+                <div class="absolute bottom-8 left-8 md:bottom-12 md:left-12 z-20 text-white mix-blend-difference font-italiana">
+                   <h2 class="text-4xl md:text-6xl uppercase leading-none animate-fade-right">{item.title}</h2>
+                </div>
+            </div>
+
+            <div class="w-full md:w-[45%] h-[60%] md:h-full p-8 md:p-20 flex flex-col justify-center relative overflow-y-auto custom-scrollbar-thin">
+                <button class="btn-close-card absolute top-6 right-6 md:top-10 md:right-10 group/close p-2 md:p-4 transition-transform hover:scale-110 z-[60]">
+                  <span class="hidden md:block text-[10px] tracking-widest uppercase opacity-40 group-hover/close:opacity-100">X (Esc)</span>
+                  <span class="md:hidden bg-black text-white w-10 h-10 rounded-full flex items-center justify-center text-lg">✕</span>
+                </button>
+
+                <div class="space-y-8 md:space-y-12 max-w-md animate-fade-in [animation-delay:0.4s]">
+                    <header class="space-y-2 md:space-y-4">
+                        <div class="flex items-center gap-4">
+                            <span class:list={["w-2 h-2 rounded-full animate-pulse", item.status === 'Open' ? 'bg-green-500' : 'bg-red-500']}></span>
+                            <span class="text-[10px] tracking-[0.3em] uppercase font-bold">{item.status}</span>
+                        </div>
+                        <h3 class="text-3xl md:text-4xl font-italiana italic">{item.subtitle}</h3>
+                    </header>
+
+                    <ul class="space-y-4 md:space-y-6">
+                        {item.prices.map((p) => (
+                          <li class="flex justify-between items-baseline border-b border-black/5 pb-2 group/price hover:border-black transition-colors duration-500">
+                            <span class="text-base md:text-lg font-light group-hover/price:translate-x-2 transition-transform duration-500">{p.item}</span>
+                            <span class="font-mono text-[10px] md:text-[11px] opacity-40 italic group-hover/price:opacity-100 transition-opacity">{p.price}</span>
+                          </li>
+                        ))}
+                    </ul>
+
+                    <button onclick="openCommissionForm()" class="w-full py-4 md:py-5 bg-black text-white text-[10px] font-bold tracking-[0.5em] uppercase hover:bg-zinc-800 hover:tracking-[0.7em] transition-all duration-500">
+                      Initialize Project
+                    </button>
+                </div>
+            </div>
+          </div>
+        </div>
       ))}
-    </div>
+    </section>
 
-    <div class="mt-16 flex flex-col items-center group cursor-pointer" onclick="openCommissionForm()">
-      <div class="mb-2 animate-bounce">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5">
-          <path d="M7 10l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <span class="font-italian text-2xl tracking-widest border-b border-black pb-1 uppercase">forum commission.!</span>
-    </div>
+    <div id="form-modal-overlay" class="fixed inset-0 bg-[#F5F5F0] z-[200] hidden opacity-0 transition-opacity duration-500">
+      
+      <button id="global-form-close" onclick="closeCommissionForm()" class="md:hidden fixed top-6 right-6 z-[300] bg-black text-white w-12 h-12 rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-all">
+        <span class="text-lg">✕</span>
+      </button>
 
-    <div id="form-modal-overlay" class="fixed inset-0 bg-black/70 z-[200] hidden items-center justify-center p-4 md:p-10 backdrop-blur-md opacity-0 transition-opacity duration-300 touch-none">
-      <div id="form-modal-content" class="bg-white w-full max-w-6xl h-[85vh] md:h-auto md:max-h-[90vh] rounded-[30px] md:rounded-[50px] shadow-2xl flex flex-col md:flex-row overflow-hidden transform scale-95 transition-transform duration-300 border border-black/10 pointer-events-auto">
+      <button id="mobile-info-btn" class="md:hidden fixed bottom-8 right-6 z-[250] bg-zinc-800 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl animate-bounce">
+        <span class="font-serif italic text-2xl">i</span>
+      </button>
+
+      <div class="w-full h-full flex flex-col md:flex-row overflow-hidden">
         
-        <div class="flex-[1.5] p-6 md:p-12 overflow-y-auto custom-scrollbar-thin">
-          <div class="flex items-center gap-2 mb-6 border-b border-black/40 w-fit">
-            <span class="font-italian text-lg">forum commission.!</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M7 14l5-5 5 5"/></svg>
-          </div>
+        <div id="guidelines-sidebar" class="w-full md:w-[40%] h-full bg-[#1A1B19] text-[#F5F5F0] p-10 md:p-20 flex flex-col fixed md:relative z-[350] md:z-auto transition-transform duration-500 translate-y-full md:translate-y-0 overflow-y-auto">
+            <header class="mb-12 flex justify-between items-start">
+                <div>
+                   <button onclick="closeCommissionForm()" class="hidden md:flex text-[10px] tracking-[0.4em] uppercase opacity-40 hover:opacity-100 mb-8 items-center gap-2 transition-all hover:-translate-x-2">
+                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                       Back
+                   </button>
+                   <h4 class="font-italiana text-4xl md:text-5xl italic">Rules & <br/>Guidelines</h4>
+                </div>
+                <button id="close-mobile-info" class="md:hidden bg-white/10 p-4 rounded-full text-xs tracking-widest uppercase">✕ Close</button>
+            </header>
 
-          <form id="commission-order-form" class="space-y-6 text-[#1A1B19]">
-            <div class="space-y-4">
-              <p class="font-linden italic opacity-70 border-b border-black/10 w-fit">Your contact!..</p>
-              <div class="flex flex-col">
-                <label class="text-[10px] uppercase font-mono mb-1">name:</label>
-                <input type="text" name="name" required class="border-b border-black/20 bg-transparent py-1 focus:outline-none focus:border-black transition-all" />
-              </div>
-              <div class="flex flex-col">
-                <label class="text-[10px] uppercase font-mono mb-1">whatsapp \ username instagram :</label>
-                <input type="text" name="contact" required class="border-b border-black/20 bg-transparent py-1 focus:outline-none focus:border-black transition-all" />
-              </div>
+            <div class="flex-1 space-y-12">
+                <div class="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
+                    <div class="space-y-2">
+                        <p class="text-[10px] font-bold tracking-widest uppercase text-red-400">I Don't Draw</p>
+                        <ul class="text-sm font-light opacity-60 leading-relaxed"><li>• Mecha / Gore</li><li>• Violence</li></ul>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-[10px] font-bold tracking-widest uppercase text-green-400">I Can</p>
+                        <ul class="text-sm font-light opacity-60 leading-relaxed"><li>• Male / Female</li><li>• OC / Fanart</li></ul>
+                    </div>
+                </div>
+                <section class="text-sm font-light opacity-80 space-y-4 border-b border-white/5 pb-12">
+                    <p><strong>Payment:</strong> Full payment upfront via PayPal / Local Bank.</p>
+                    <p><strong>Copyright:</strong> Personal use only.</p>
+                    <p><strong>Revisions:</strong> Free at Sketch & Base stages.</p>
+                </section>
             </div>
-
-            <div class="space-y-4 pt-4">
-              <p class="font-linden italic opacity-70 border-b border-black/10 w-fit">list Order</p>
-              <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                <label class="text-sm font-italian min-w-[120px]">chose Type :</label>
-                <select id="select-type" name="category" required class="flex-1 bg-[#F0F0EB] p-2 rounded-md border border-black/5 focus:outline-none">
-                  <option value="">-- select --</option>
-                  <option value="2d">2D Asset</option>
-                  <option value="illustration">Illustration</option>
-                  <option value="3d">3D Asset</option>
-                </select>
-              </div>
-              <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-                <label class="text-sm font-italian min-w-[120px]">chose coverage :</label>
-                <select id="select-coverage" name="packageName" required disabled class="flex-1 bg-[#F0F0EB] p-2 rounded-md border border-black/5 focus:outline-none disabled:opacity-40">
-                  <option value="">-- select type first --</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="space-y-2 pt-4">
-              <p class="font-linden italic opacity-70 border-b border-black/10 w-fit">your description</p>
-              <textarea name="description" placeholder="Details (Poses, Emotions, References etc)" class="w-full h-32 p-4 bg-[#F5F5F0] border border-black/10 rounded-2xl focus:outline-none focus:border-black transition-all resize-none font-linden"></textarea>
-            </div>
-
-            <button type="submit" id="submit-btn" class="w-full py-4 bg-[#1A1B19] text-white font-mono uppercase tracking-[0.3em] text-xs hover:bg-black transition-all rounded-xl">SUBMIT ORDER</button>
-          </form>
         </div>
 
-        <div class="hidden md:block w-[1px] bg-black/5 my-12"></div>
+        <div class="w-full md:w-[60%] h-full p-6 md:p-24 overflow-y-auto bg-white flex flex-col">
+            <div class="max-w-xl w-full mx-auto my-auto space-y-12 md:space-y-16 py-20 md:py-0">
+                <header>
+                    <h2 class="font-italiana text-3xl md:text-4xl uppercase italic text-center md:text-left">Form Inquiry</h2>
+                    <div class="w-12 h-[1px] bg-black mt-4 mx-auto md:mx-0"></div>
+                </header>
+                
+                <form id="commission-order-form" class="space-y-10 md:space-y-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                        <div class="flex flex-col gap-2 border-b border-black/10 pb-2 focus-within:border-black transition-colors">
+                            <label class="text-[9px] uppercase tracking-widest opacity-40">Client Name</label>
+                            <input type="text" name="name" required class="bg-transparent outline-none text-lg" />
+                        </div>
+                        <div class="flex flex-col gap-2 border-b border-black/10 pb-2 focus-within:border-black transition-colors">
+                            <label class="text-[9px] uppercase tracking-widest opacity-40">Contact (IG/WA)</label>
+                            <input type="text" name="contact" required class="bg-transparent outline-none text-lg" />
+                        </div>
+                    </div>
 
-        <div class="flex-1 p-6 md:p-12 bg-[#F9F9F7] md:bg-transparent flex flex-col overflow-hidden border-t md:border-t-0 border-black/5 min-h-[300px] md:min-h-0">
-          <div class="flex justify-between items-center mb-4">
-            <h4 class="font-bold border-b border-black uppercase tracking-widest text-xs">Commission Guidelines</h4>
-            <button onclick="closeCommissionForm()" class="md:hidden text-[10px] font-bold border border-black/40 px-2 py-1 uppercase">Close</button>
-          </div>
-          
-          <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar-thin text-[11px] md:text-[1vw] leading-relaxed space-y-6 pb-6">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="font-linden mb-1 underline text-black-700">I DON'T DRAW</p>
-                <ul class="opacity-70 space-y-0.5 font-linden"><li>• Mecha / Robots</li><li>• Gore / Violence</li></ul>
-              </div>
-              <div>
-                <p class="font-linden mb-1 underline text-black-700">I CAN =</p>
-                <ul class="opacity-70 space-y-0.5 font-linden"><li>• Male / Female</li><li>• OC / Fanart</li></ul>
-              </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-[9px] uppercase tracking-widest opacity-40">Project Type</label>
+                            <select id="select-type" name="category" required class="bg-transparent border-b border-black/10 py-2 outline-none focus:border-black text-sm md:text-base">
+                                <option value="">Select Service</option>
+                                <option value="2d">2D Asset</option>
+                                <option value="illustration">Illustration</option>
+                                <option value="3d">3D Asset</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-[9px] uppercase tracking-widest opacity-40">Coverage</label>
+                            <select id="select-coverage" name="packageName" required disabled class="bg-transparent border-b border-black/10 py-2 outline-none disabled:opacity-20 focus:border-black text-sm md:text-base">
+                                <option value="">Select type first</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-[9px] uppercase tracking-widest opacity-40">Description / Brief</label>
+                        <textarea name="description" rows="4" class="bg-[#F0F0EB] p-5 md:p-6 outline-none resize-none text-base md:text-lg border border-black/5 focus:border-black/20 transition-all" placeholder="Details (Poses, References, etc)"></textarea>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full py-5 md:py-6 bg-black text-white font-bold tracking-[0.6em] text-[10px] uppercase hover:bg-zinc-800 transition-all active:scale-[0.98]">Submit Order</button>
+                </form>
             </div>
-
-            <section>
-              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">General Rules:</h5>
-              <div class="space-y-2 opacity-80 font-linden">
-                <p><strong>Copyright:</strong> I retain all rights to the artwork. Portfolio usage unless requested otherwise.</p>
-                <p><strong>Usage:</strong> Personal use only. Commercial use requires prior discussion (extra fee).</p>
-                <p><strong>Background:</strong> Simple/flat is free. Detailed backgrounds incur charges.</p>
-              </div>
-            </section>
-
-            <section>
-              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">Payment & Process:</h5>
-              <div class="space-y-2 opacity-80 font-linden">
-                <p><strong>Payment:</strong> Full payment upfront via PayPal / Local Bank.</p>
-                <p><strong>No Refunds:</strong> No cancellations once work has started.</p>
-                <p><strong>Duration:</strong> Estimated time provided. Please be patient!</p>
-              </div>
-            </section>
-
-            <section>
-              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">Revisions:</h5>
-              <div class="space-y-2 opacity-80 font-linden">
-                <p>• Free revisions at: <strong>Sketch, Base Color, and Final.</strong></p>
-                <p>• No major changes after sketch phase.</p>
-              </div>
-            </section>
-
-            <section>
-              <h5 class="font-bold bg-black text-white px-2 py-0.5 w-fit mb-2 text-[1vw]">Final Files:</h5>
-              <p class="opacity-80 font-linden">High-Res PNG/JPG and PSD via email.</p>
-            </section>
-          </div>
-          
-          <button onclick="closeCommissionForm()" class="hidden md:block mt-8 w-full py-2 border border-black/20 font-mono text-[10px] uppercase hover:bg-black hover:text-white transition-all">Close Forum</button>
         </div>
       </div>
     </div>
-
-    <div id="modal-overlay" class="fixed inset-0 bg-black/50 z-[99] hidden flex-col items-center justify-center p-6 backdrop-blur-md opacity-0 transition-opacity duration-300 touch-none">
-      <div class="bg-[#F5F5F0] w-full max-w-sm h-auto max-h-[85vh] relative shadow-2xl flex flex-col border border-[#1A1B19]/20 transform scale-95 transition-transform duration-300 overflow-hidden pointer-events-auto" id="modal-content">
-        <button onclick="closeModal()" class="absolute top-4 right-4 z-[100] bg-black text-white p-2 rounded-full shadow-lg">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-        <div class="w-full h-48 bg-gray-800 overflow-hidden">
-          <img id="modal-img" src="" class="w-full h-full object-cover grayscale" />
-        </div>
-        <div class="p-8 flex flex-col items-center">
-           <h3 id="modal-type" class="font-italian text-3xl mb-4 tracking-widest border-b border-black text-center">TYPE</h3>
-           <ul id="modal-list" class="w-full space-y-4 font-linden text-center"></ul>
-           <a href="/contact" class="mt-8 px-8 py-2 bg-[#1A1B19] text-white font-mono text-sm uppercase tracking-tighter">ORDER NOW</a>
-        </div>
-      </div>
-    </div>
-
-  </section>
+  </main>
 </Nav>
 
 <style>
-  /* MENCEGAH SCROLL BACKGROUND */
-  :global(body.modal-open) {
-    overflow: hidden !important;
-    height: 100vh;
+  @import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
+  .font-italiana { font-family: 'Italiana', serif; }
+  
+  :global(body.modal-open) { overflow: hidden !important; position: fixed; width: 100%; }
+
+  /* Animations */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+  @keyframes blink { 50% { border-color: transparent; } }
+
+  .animate-fade-up { animation: fadeUp 1s ease forwards; }
+  .animate-fade-down { animation: fadeDown 1s ease forwards; }
+  .animate-fade-in { animation: fadeIn 1s ease forwards; }
+  .animate-typewriter-title { animation: typewriter 2s steps(40) forwards, blink 0.8s infinite; }
+
+  /* Card States Desktop */
+  @media (min-width: 768px) {
+    .card-active { flex: 10 !important; cursor: default !important; }
+    .card-active .collapsed-view { opacity: 0; pointer-events: none; }
+    .card-active .expanded-view { opacity: 1; pointer-events: auto; }
+    .card-inactive { flex: 0.1 !important; opacity: 0.1; filter: grayscale(1); pointer-events: none; }
   }
 
-  .custom-scrollbar-thin::-webkit-scrollbar { width: 3px; }
-  .custom-scrollbar-thin::-webkit-scrollbar-thumb { background: #1A1B19; border-radius: 10px; }
+  /* Card States Mobile - Using Transform instead of Flex to avoid jumping */
+  @media (max-width: 767px) {
+    .card-active { position: fixed; inset: 0; z-index: 100; flex: none !important; }
+    .card-active .expanded-view { opacity: 1; pointer-events: auto; }
+  }
 
-  .card-main { flex: 1; transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-  .expanded-view { display: none; }
-  .card-active { flex: 5 !important; background-color: #F5F5F0 !important; cursor: default !important; }
-  .card-active .collapsed-view { opacity: 0; display: none; }
-  .card-active .expanded-view { display: flex; opacity: 1; pointer-events: auto; }
-  .card-inactive { flex: 0.3 !important; opacity: 0.4; filter: grayscale(1); pointer-events: none; }
-  .card-interactive:not(.card-inactive):hover { flex: 1.2; background-color: #E0E0DB; }
-  @keyframes flash { 0% { opacity: 0; } 50% { opacity: 0.8; } 100% { opacity: 0; } }
-  .animate-blink { animation: flash 0.15s ease-in-out 2; }
+  .custom-scrollbar-thin::-webkit-scrollbar { width: 2px; }
+  .custom-scrollbar-thin::-webkit-scrollbar-thumb { background: #1A1B19; }
 </style>
 
 <script is:inline define:vars={{ commissions }}>
-  // UTILITY UNTUK BODY SCROLL LOCK
   const lockScroll = () => document.body.classList.add('modal-open');
   const unlockScroll = () => document.body.classList.remove('modal-open');
 
-  // --- LOGIC KARTU (TETAP SAMA) ---
   const cards = document.querySelectorAll('.card-interactive');
   const closeBtns = document.querySelectorAll('.btn-close-card');
+  const sidebar = document.getElementById('guidelines-sidebar');
+  const globalClose = document.getElementById('global-form-close');
+
+  // Mobile Info Toggle Logic
+  const mobileInfoBtn = document.getElementById('mobile-info-btn');
+  const closeMobileInfoBtn = document.getElementById('close-mobile-info');
+
+  mobileInfoBtn?.addEventListener('click', () => {
+    sidebar.classList.remove('translate-y-full');
+    sidebar.classList.add('translate-y-0');
+    // Hide main close button when info is open to avoid mess
+    if(globalClose) globalClose.style.display = 'none';
+  });
+
+  const closeSidebarMobile = () => {
+    if (window.innerWidth < 768) {
+        sidebar.classList.add('translate-y-full');
+        sidebar.classList.remove('translate-y-0');
+        if(globalClose) globalClose.style.display = 'flex';
+    }
+  };
+
+  closeMobileInfoBtn?.addEventListener('click', closeSidebarMobile);
+
+  // Card Activation
   cards.forEach(card => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.btn-close-card')) return;
-      cards.forEach(c => c.classList.remove('card-active', 'card-inactive'));
+      if (card.classList.contains('card-active')) return;
+
+      cards.forEach(c => {
+        c.classList.remove('card-active');
+        c.classList.add('card-inactive');
+      });
+      card.classList.remove('card-inactive');
       card.classList.add('card-active');
-      document.querySelectorAll('.card-main:not(.card-active)').forEach(c => c.classList.add('card-inactive'));
-    });
-  });
-  closeBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      document.querySelectorAll('.card-main').forEach(c => c.classList.remove('card-active', 'card-inactive'));
+      lockScroll();
     });
   });
 
-  // --- LOGIC FORUM COMMISSION (DIPERBARUI DENGAN LOCK) ---
+  // Card Deactivation
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cards.forEach(c => c.classList.remove('card-active', 'card-inactive'));
+      unlockScroll();
+    });
+  });
+
+  // Dropdown Logic
   const coverageData = {
     "2d": ["Icon/Prop", "Half Body Parts", "Full Set"],
     "illustration": ["Portrait", "Half Body", "Full Body", "Narrative Scene"],
     "3d": ["Modeling Object", "Modeling Char"]
   };
+
   const selectType = document.getElementById('select-type');
   const selectCoverage = document.getElementById('select-coverage');
+
   selectType?.addEventListener('change', (e) => {
     const val = e.target.value;
     if (val && coverageData[val]) {
       selectCoverage.disabled = false;
-      selectCoverage.innerHTML = '<option value="">-- select coverage --</option>' + 
+      selectCoverage.innerHTML = '<option value="">Select Coverage</option>' + 
         coverageData[val].map(item => `<option value="${item}">${item}</option>`).join('');
     } else {
       selectCoverage.disabled = true;
-      selectCoverage.innerHTML = '<option value="">-- select type first --</option>';
+      selectCoverage.innerHTML = '<option value="">Select type first</option>';
     }
   });
 
+  // Global Forum Modal Logic
   window.openCommissionForm = () => {
-    lockScroll();
     const overlay = document.getElementById('form-modal-overlay');
-    const content = document.getElementById('form-modal-content');
-    overlay.classList.remove('hidden'); overlay.classList.add('flex');
-    setTimeout(() => { overlay.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+    overlay.classList.remove('hidden');
+    setTimeout(() => { overlay.classList.remove('opacity-0'); lockScroll(); }, 10);
   };
+
   window.closeCommissionForm = () => {
-    unlockScroll();
     const overlay = document.getElementById('form-modal-overlay');
-    const content = document.getElementById('form-modal-content');
-    overlay.classList.add('opacity-0'); content.classList.add('scale-95');
-    setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }, 300);
+    overlay.classList.add('opacity-0');
+    closeSidebarMobile();
+    setTimeout(() => { overlay.classList.add('hidden'); unlockScroll(); }, 500);
   };
 
-  // --- LOGIC MODAL LAMA ---
-  window.openModal = function(id) {
-    lockScroll();
-    const data = commissions.find(c => c.id === id);
-    if (!data) return;
-    document.getElementById('modal-type').innerText = data.title;
-    document.getElementById('modal-img').src = data.img || '';
-    const listParent = document.getElementById('modal-list');
-    listParent.innerHTML = data.prices.map(p => `<li class="flex flex-col border-b border-black/5 pb-2"><span class="text-xs opacity-60 uppercase font-mono">${p.item}</span><span class="font-bold text-lg">${p.price}</span></li>`).join('');
-    const overlay = document.getElementById('modal-overlay');
-    const content = document.getElementById('modal-content');
-    overlay.classList.remove('hidden'); overlay.classList.add('flex');
-    setTimeout(() => { overlay.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
-  }
-  window.closeModal = function() {
-    unlockScroll();
-    const overlay = document.getElementById('modal-overlay');
-    const content = document.getElementById('modal-content');
-    overlay.classList.add('opacity-0'); content.classList.add('scale-95');
-    setTimeout(() => { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }, 300);
-  }
-
-  // Blink logic
-  window.triggerBlinkMobile = (id) => {
-    const layer = document.getElementById(`blink-${id}`);
-    if(layer) { layer.classList.add('animate-blink'); setTimeout(() => layer.classList.remove('animate-blink'), 400); }
-  }
-
-  // --- LOGIC PENGIRIMAN FORM (INI YANG SAYA TAMBAHKAN) ---
+  // Resend API (Safe)
   const commissionForm = document.getElementById('commission-order-form');
   if (commissionForm) {
     commissionForm.addEventListener('submit', async (e) => {
-      e.preventDefault(); // Mencegah refresh
-
+      e.preventDefault();
       const submitBtn = document.getElementById('submit-btn');
       const originalText = submitBtn.innerText;
-      
-      // Ubah UI jadi Loading
       submitBtn.innerText = "SENDING...";
       submitBtn.disabled = true;
-      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
       const formData = new FormData(commissionForm);
       const data = {
@@ -379,31 +361,35 @@ const commissions = [
       };
 
       try {
-        // Kirim ke API (src/pages/api/commission.ts)
         const response = await fetch('/api/commission', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
-
-        const result = await response.json();
-
         if (response.ok) {
-          alert('Commission request sent successfully! Check your email soon.');
+          alert('Sent successfully!');
           commissionForm.reset();
           window.closeCommissionForm();
         } else {
-          alert('Failed to send: ' + (result.error || 'Unknown error'));
+          const res = await response.json();
+          alert('Failed: ' + (res.error || 'Check connection'));
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
+        alert('Network Error.');
       } finally {
-        // Kembalikan tombol seperti semula
         submitBtn.innerText = originalText;
         submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
       }
     });
   }
+
+  // Keyboard Fix
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        window.closeCommissionForm();
+        closeSidebarMobile();
+        cards.forEach(c => c.classList.remove('card-active', 'card-inactive'));
+        unlockScroll();
+    }
+  });
 </script>

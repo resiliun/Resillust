@@ -1,0 +1,83 @@
+[
+    {
+        "id": "33978edb",
+        "category": "illustration",
+        "title": "lady of Knight",
+        "description": "salah satu karya study saya yang memvisualkan wanita dari darah biru namun memilih menjadi kesartia",
+        "year": "2026",
+        "genres": [
+            "illustration",
+            "study",
+            "mediaval"
+        ],
+        "slides": [
+            "33978edb_1.jpg",
+            "33978edb_2.mp4"
+        ]
+    },
+    {
+        "id": "a64ba3b6",
+        "category": "illustration",
+        "title": "monster",
+        "description": "salah satu karya tugas seni teknologi media saya",
+        "year": "2026",
+        "genres": [
+            "fantasy",
+            "japanse",
+            "digital_illsutration"
+        ],
+        "slides": [
+            "a64ba3b6_1.jpg",
+            "a64ba3b6_2.mp4",
+            "a64ba3b6_3.mp4"
+        ]
+    },
+    {
+        "id": "eceb540b",
+        "category": "illustration",
+        "title": "",
+        "description": "",
+        "year": "2026",
+        "genres": [],
+        "slides": [
+            "eceb540b_1.jpg",
+            "eceb540b_2.mp4"
+        ]
+    },
+    {
+        "id": "2ec8cf0f",
+        "category": "illustration",
+        "title": "",
+        "description": "",
+        "year": "2026",
+        "genres": [],
+        "slides": [
+            "2ec8cf0f_1.jpg",
+            "2ec8cf0f_2.mp4"
+        ]
+    },
+    {
+        "id": "a2b943b7",
+        "category": "illustration",
+        "title": "explode",
+        "description": "just traying to combine bone and girl to be illutation ,its not a somethink new,but i kind like it",
+        "year": "2026",
+        "genres": [],
+        "slides": [
+            "a2b943b7_1.webp",
+            "a2b943b7_2.mp4"
+        ]
+    },
+    {
+        "id": "829cf652",
+        "category": "illustration",
+        "title": "Monster",
+        "description": "salah satu karya tugas gw di seni murni MK seni teknologi media",
+        "year": "2026",
+        "genres": [],
+        "slides": [
+            "829cf652_1.jpg",
+            "829cf652_2.mp4"
+        ]
+    }
+]
