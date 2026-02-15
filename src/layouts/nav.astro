@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css"
+import LogoGue from '../components/icon.astro';
 ---
 <!DOCTYPE html>
 <html lang="id" class="overflow-x-hidden">
@@ -28,6 +29,16 @@ import "../styles/global.css"
 
         .collapsed .hide-on-collapsed { display: none !important; }
 
+        /* Transition smooth untuk icon toggle */
+        #toggle-pc svg { transition: transform 0.4s ease; }
+        .collapsed #toggle-pc svg { transform: rotate(180deg); }
+
+        /* Layout Logo pas collapsed */
+        .collapsed .logo-container {
+            justify-content: center;
+            padding: 2rem 0.5rem !important;
+        }
+
         @media (max-width: 768px) {
             #nav-slab { width: 100% !important; height: auto !important; transform: none !important; }
         }
@@ -36,77 +47,81 @@ import "../styles/global.css"
 
 <body class="no-scrollbar">
 
-    <aside id="sidebar-container" class="fixed left-0 top-0 z-50 w-full md:w-[17vw] h-auto md:h-screen p-0 flex flex-col transition-all duration-500 group">
-        
-        <button id="toggle-pc" class="hidden md:block absolute -right-3 top-20 bg-black text-white text-[8px] p-1 z-[60] rotate-90 font-mono cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
-            SLIDE
-        </button>
+   <aside id="sidebar-container" class="fixed left-0 top-0 z-50 w-full md:w-[17vw] h-auto md:h-screen p-0 flex flex-col transition-all duration-500 group">
+    
+    <button id="toggle-pc" class="hidden md:flex absolute -right-9 top-24 bg-black text-white w-10 h-10 items-center justify-center z-[60] cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+        <svg id="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+            <path d="M4 6V18" stroke="currentColor" stroke-width="2" stroke-linecap="square" opacity="0.3"/>
+        </svg>
+    </button>
 
-        <div id="nav-slab" class="w-full h-full bg-[#0F0F0F] border-t-[8px] md:border-t-[12px] border-black relative flex flex-col overflow-hidden shadow-[15px_0px_35px_rgba(0,0,0,0.3)]">
+    <div id="nav-slab" class="w-full h-full bg-[#0F0F0F] border-t-[8px] md:border-t-[12px] border-black relative flex flex-col overflow-hidden shadow-[15px_0px_35px_rgba(0,0,0,0.3)]">
+        
+        <div class="logo-container p-6 md:p-8 border-b border-white/[0.08] flex items-center gap-4 transition-all duration-500">
+            <div class="logo-box w-8 h-8 md:w-20 md:h-10 bg-white shrink-0 shadow-lg flex items-center justify-center font-italiana text-black text-xs font-bold">
+                <LogoGue class="w-30 h-30 drop-shadow-md transition-all duration-300 hover:invert" />
+            </div>
             
-            <div class="p-6 md:p-8 border-b border-white/[0.08] flex justify-between items-center md:block">
-                <div class="hide-on-collapsed">
-                    <h1 class="font-mono text-[8px] md:text-[10px] leading-tight tracking-[0.3em] uppercase opacity-40 mb-8 text-white">
-                        Resillust<br class="hidden md:block"/> Porto
-                    </h1>
-                </div>
-                <div id="logo-text" class="text-xl md:text-3xl font-italiana lowercase italic leading-none transition-all text-white group-[.collapsed]:text-center group-[.collapsed]:text-lg">
+            <div class="hide-on-collapsed flex flex-col">
+                <h1 class="font-mono text-[8px] md:text-[10px] leading-tight tracking-[0.3em] uppercase opacity-40 text-white">
+                    Resillust<br class="hidden md:block"/> Porto
+                </h1>
+                <div id="logo-text" class="text-xl md:text-3xl font-italiana lowercase italic leading-none transition-all text-white">
                     Re<span class="hide-on-collapsed">sillust</span><span class="not-italic text-[0.5em] align-top opacity-20">/</span>s.
                 </div>
             </div>
+        </div>
 
-            <nav class="flex-1 flex flex-row md:flex-col font-plex uppercase italic overflow-x-auto md:overflow-x-visible no-scrollbar">
-                <ul class="flex flex-row md:flex-col w-full">
-                    {[
-                        {name: 'Home', icon: '⌂'}, 
-                        {name: 'About', icon: 'ⓘ'}, 
-                        {name: 'Artwork', icon: '✦'}, 
-                        {name: 'Commission', icon: '＄'}, 
-                        {name: 'Contact', icon: '✉'}
-                    ].map((item, i) => (
-                        <li class="flex-1 md:flex-none border-r md:border-r-0 md:border-b border-white/5 group/item">
-                            <a href={item.name === 'Home' ? '/' : `/${item.name.toLowerCase()}`} 
-                               class="relative flex flex-col items-center md:items-start px-6 py-6 md:py-8 transition-all duration-300 hover:text-black text-white touch-manipulation">
-                                
-                                <div class="absolute inset-0 opacity-0 group-hover/item:opacity-100 active:opacity-100 transition-opacity duration-300 bg-white z-0">
-                                    <div class="absolute inset-0" style="background-image: radial-gradient(#000 1px, transparent 0); background-size: 4px 4px; opacity: 0.1;"></div>
+        <nav class="flex-1 flex overflow-x-auto md:overflow-x-visible no-scrollbar font-plex uppercase italic">
+            <ul class="flex flex-row md:flex-col w-full min-w-max md:min-w-0">
+                {[
+                    {name: 'Home', icon: '⌂'}, 
+                    {name: 'About', icon: 'ⓘ'}, 
+                    {name: 'Artwork', icon: '✦'}, 
+                    {name: 'Commission', icon: '＄'}, 
+                    {name: 'Contact', icon: '✉'}
+                ].map((item, i) => (
+                    <li class="border-r md:border-r-0 md:border-b border-white/5 group/item">
+                        <a href={item.name === 'Home' ? '/' : `/${item.name.toLowerCase()}`} 
+                           class="relative flex flex-col items-center md:items-start px-8 md:px-6 py-4 md:py-8 transition-all duration-300 hover:text-black text-white touch-manipulation">
+                            
+                            <div class="absolute inset-0 opacity-0 group-hover/item:opacity-100 active:opacity-100 transition-opacity duration-300 bg-white z-0">
+                                <div class="absolute inset-0" style="background-image: radial-gradient(#000 1px, transparent 0); background-size: 4px 4px; opacity: 0.1;"></div>
+                            </div>
+                            
+                            <div class="relative z-10 flex flex-col items-center md:items-start w-full">
+                                <span class="hidden md:block font-mono text-[8px] not-italic mb-2 opacity-30 group-hover/item:text-black hide-on-collapsed">0{i+1}</span>
+                                <div class="flex items-center justify-between w-full gap-4">
+                                    <span class="font-mono text-xl md:text-2xl not-italic md:hidden group-[.collapsed]:block">{item.icon}</span>
+                                    <span class="hidden md:block group-[.collapsed]:hidden text-sm md:text-lg tracking-tighter group-hover/item:pl-4 transition-all duration-500">{item.name}</span>
+                                    <span class="hidden md:block group-[.collapsed]:hidden text-xs opacity-0 group-hover/item:opacity-100 transition-opacity font-mono">-></span>
                                 </div>
-                                
-                                <div class="relative z-10 flex flex-col items-center md:items-start w-full">
-                                    <span class="hidden md:block font-mono text-[8px] not-italic mb-2 opacity-30 group-hover/item:text-black hide-on-collapsed">0{i+1}</span>
-                                    <div class="flex items-center justify-between w-full">
-                                        <span class="md:hidden group-[.collapsed]:block font-mono text-xl not-italic">{item.icon}</span>
-                                        <span class="hidden md:block group-[.collapsed]:hidden text-sm md:text-lg tracking-tighter group-hover/item:pl-4 transition-all duration-500">{item.name}</span>
-                                        <span class="hidden md:block group-[.collapsed]:hidden text-xs opacity-0 group-hover/item:opacity-100 transition-opacity font-mono">-></span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
+                            </div>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
 
-            <div id="nav-footer" class="hidden md:block p-8 bg-white/[0.02] font-mono text-[9px] tracking-tight hide-on-collapsed text-white">
-                <div class="flex flex-col gap-1 opacity-40">
-                    <p>STATUS: OPERATIONAL</p>
-                    <p>COORD: 7°33' S / 110°49' E</p>
-                </div>
+        <div id="nav-footer" class="hidden md:block p-8 bg-white/[0.02] font-mono text-[9px] tracking-tight hide-on-collapsed text-white">
+            <div class="flex flex-col gap-1 opacity-40">
+                <p>STATUS: OPERATIONAL</p>
+                <p>COORD: 7°33' S / 110°49' E</p>
             </div>
         </div>
-    </aside>
+    </div>
+</aside>
 
-    <main id="main-content" class="md:ml-[20vw] p-0 transition-all duration-500 min-h-screen bg-white">
-<main class="flex-1 relative min-w-0 overflow-hidden">
+<main id="main-content" class="pt-[140px] md:pt-0 md:ml-[17vw] transition-all duration-500 min-h-screen bg-white">
     <slot />
-  </main>
-    </main>
+</main>
 
     <script>
     const slab = document.getElementById('nav-slab') as HTMLElement;
     const sidebar = document.getElementById('sidebar-container') as HTMLElement;
     const main = document.getElementById('main-content') as HTMLElement;
     const toggleBtn = document.getElementById('toggle-pc') as HTMLElement;
-    let lastScrollY = window.scrollY;
 
     toggleBtn?.addEventListener('click', () => {
         if (!sidebar || !main) return;
@@ -114,43 +129,26 @@ import "../styles/global.css"
         sidebar.classList.toggle('collapsed');
         
         if (sidebar.classList.contains('collapsed')) {
-            sidebar.style.width = '80px'; // Lebar bar saat ciut
+            sidebar.style.width = '80px'; 
             main.style.marginLeft = '80px';
-            toggleBtn.innerText = 'EXPAND';
         } else {
-            sidebar.style.width = '17vw'; // Lebar bar saat normal
-            main.style.marginLeft = '20vw';
-            toggleBtn.innerText = 'COLLAPSE';
+            sidebar.style.width = '17vw'; 
+            main.style.marginLeft = '17vw';
         }
     });
 
+    // Mouse Move Effect (X-axis only)
     if (window.innerWidth > 768) {
         document.addEventListener('mousemove', (e) => {
             if (slab && sidebar && !sidebar.classList.contains('collapsed')) {
                 const rect = slab.getBoundingClientRect();
                 const moveX = (e.clientX - (rect.left + rect.width / 2)) * -0.01;
-                const moveY = (e.clientY - (rect.top + rect.height / 2)) * -0.01;
-                slab.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                slab.style.transform = `translate(${moveX}px, 0px)`;
             } else if (slab) {
                 slab.style.transform = `translate(0, 0)`;
             }
         });
     }
-
-  if (window.innerWidth > 768) {
-    document.addEventListener('mousemove', (e) => {
-        if (slab && sidebar && !sidebar.classList.contains('collapsed')) {
-            const rect = slab.getBoundingClientRect();
-            // Kalkulasi hanya untuk horizontal (X)
-            const moveX = (e.clientX - (rect.left + rect.width / 2)) * -0.01;
-            
-            // translate sumbu Y di-set ke 0 biar gak melayang ke atas/bawah
-            slab.style.transform = `translate(${moveX}px, 0px)`;
-        } else if (slab) {
-            slab.style.transform = `translate(0, 0)`;
-        }
-    });
-}
     </script>
 </body>
 </html>
